@@ -3,6 +3,7 @@
 Authentication module for the API.
 """
 import request from flask
+from typing import List, TypeVar
 
 
 class Auth:
