@@ -26,3 +26,19 @@ class BasicAuth(Auth):
             if field_match is not None:
                 return field_match.group('token')
         return None
+
+    def decode_base64_authorization_header(
+            self, base64_authorization_header: str) -> str:
+        """
+        Returns the decoded value of a Base64
+        string base64_authorization_header
+        """
+        if type(base64_authorization_header) == str:
+            try:
+                res_decoded = base64.b64decode(
+                    base64_authorization_header,
+                    validate=True,
+                )
+                return res_decoded.decode('utf-8')
+            except (binascii.Error, UnicodeDecodeError):
+                return None
