@@ -37,3 +37,18 @@ def user_login() -> Tuple[str, int]:
         result.set_cookie(os.getenv("SESSION_NAME"), session_id)
         return result
     return jsonify({"error": "wrong password"}), 401
+
+
+@app_views.route(
+    '/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+def user_logout() -> Tuple[str, int]:
+    """
+        DELETE /api/v1/auth_session/logout
+    Return:
+        An empty JSON object.
+    """
+    from api.v1.app import auth
+    session_destroyed = auth.destroy_session(request)
+    if not session_destroyed:
+        abort(404)
+    return jsonify({})
