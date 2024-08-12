@@ -3,12 +3,17 @@
 DB module
 """
 from sqlalchemy import create_engine
+from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm.session import Session
+from typing import TypeVar
 
 from user import Base, User
+
+
+DATA = ['id', 'email', 'hashed_password', 'session_id', 'reset_token']
 
 
 class DB:
@@ -57,3 +62,17 @@ class DB:
         if not user:
             raise NoResultFound
         return user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """
+        Method will use find_user_by to locate the user to update,
+        then will update the user's attributes as passed in the
+        method's arguments then commit changes to the database.
+        """
+        user = self.find_user_by(id=user_id)
+        for key, val in kwargs.items():
+            if key not in DATA:
+                raise ValueError
+            setattr(user, key, val)
+        self._session.commit()
+        return None
