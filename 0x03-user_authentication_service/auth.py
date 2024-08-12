@@ -5,7 +5,9 @@ Auth Module
 
 from db import DB
 from user import User
+from uuid import uuid4
 from bcrypt import hashpw, gensalt, checkpw
+from typing import TypeVar
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -14,6 +16,14 @@ def _hash_password(password: str) -> bytes:
     Takes in a password string arguments and returns bytes
     """
     return hashpw(password.encode('utf-8'), gensalt())
+
+
+def _generate_uuid() -> str:
+    """
+    Return a string representation of
+    a new UUID. Use the uuid module.
+    """
+    return str(uuid4())
 
 
 class Auth:
