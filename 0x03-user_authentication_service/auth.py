@@ -55,3 +55,17 @@ class Auth:
         except NoResultFound:
             return False
         return checkpw(password.encode('utf-8'), user.hashed_password)
+
+    def create_session(self, email: str) -> str:
+        """
+        Takes an email string argument and returns the session ID as a string.
+        It finds the user corresponding to the email, generate a new UUID
+        and store it in the database as the user's session_id,
+        then return the session ID.
+        """
+        try:
+            user = self._db.find_user_by(email=email)
+            session_id = _generate_uuid()
+            self._db.update_user(user.id, session_id=session_id)
+        except NoResultFound:
+            return
