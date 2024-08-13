@@ -45,7 +45,7 @@ class DB:
         Takes email and hashed_password, and returns a User object.
         """
         if not email and not hashed_password:
-            return
+            return None
         user = User(email=email, hashed_password=hashed_password)
         session = self._session
         session.add(user)
