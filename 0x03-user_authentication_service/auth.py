@@ -4,8 +4,8 @@ Auth Module
 """
 
 from db import DB
-from user import User
 from uuid import uuid4
+from user import User
 from bcrypt import hashpw, gensalt, checkpw
 from typing import TypeVar
 from sqlalchemy.orm.exc import NoResultFound
