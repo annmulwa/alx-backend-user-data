@@ -44,12 +44,13 @@ class DB:
         """
         Takes email and hashed_password, and returns a User object.
         """
-        if not email and not hashed_password:
-            return None
-        user = User(email=email, hashed_password=hashed_password)
-        session = self._session
-        session.add(user)
-        session.commit()
+        try:
+            user = User(email=email, hashed_password=hashed_password)
+            self._session.add(user)
+            self._session.commit()
+        except Exception:
+            self._session.rollback()
+            user = None
         return user
 
     def find_user_by(self, **kwargs) -> User:
